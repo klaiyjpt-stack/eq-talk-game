@@ -420,9 +420,13 @@ const GAMES=[
  {id:'hang',  n:'Word Builder',i:'🔤',d:'Guess letters to open the word. Misses build a picture, never a hanged man.'},
 ];
 const $=i=>document.getElementById(i);
-function goBack(){                                   // 들어온 곳으로 (없으면 화면 맨 위로)
-  if(history.length>1){history.back();setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),120)}
-  else window.scrollTo({top:0,behavior:'smooth'});
+const PORTAL='https://amyschool.kr/portal/zoom-keystone.html';   // 선생님 포털
+function goBack(){                                   // 포털로 복귀 (같은 사이트에서 왔으면 뒤로가기)
+  try{
+    if(document.referrer&&new URL(document.referrer).host===location.host&&history.length>1){history.back();return}
+  }catch(e){}
+  if(location.protocol==='file:')return;             // 로컬 파일로 열었을 땐 이동 안 함
+  location.href=PORTAL;
 }
 const show=s=>document.querySelectorAll('.scr').forEach(e=>e.classList.toggle('on',e.id==s));
 let G={},game='speed',AC;
