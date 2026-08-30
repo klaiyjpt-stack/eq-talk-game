@@ -287,6 +287,7 @@ button{cursor:pointer}
 
 <div class="scr on" id="setup">
   <div class="hero">
+    <button class="mini" id="homeBack" onclick="tap();goBack()">← BACK</button>
     <span class="logo big"></span>
     <div><div class="ttl">EQ Talk <span style="color:var(--pink)">&amp; Game</span></div>
       <div class="sub">Extended Learning Question · Let's Talk! · 30 books · 3,809 questions</div></div>
@@ -330,7 +331,7 @@ button{cursor:pointer}
   </div>
   <div class="card rules full">
     <b style="font-size:16px">House rules — read before you play</b>
-    <div style="font-size:15px;line-height:1.7;margin-top:8px;color:rgba(255,255,255,.9)">
+    <div style="font-size:15px;line-height:1.7;margin-top:8px">
       This is <b>not a contest</b>. No points, no winner, no losing team.<br>
       Everyone gets the same number of turns. A miss just passes the question along — it costs nothing.<br>
       Never rush a child. The fuse pops at zero just for fun — the game still waits for you.
@@ -419,6 +420,10 @@ const GAMES=[
  {id:'hang',  n:'Word Builder',i:'🔤',d:'Guess letters to open the word. Misses build a picture, never a hanged man.'},
 ];
 const $=i=>document.getElementById(i);
+function goBack(){                                   // 들어온 곳으로 (없으면 화면 맨 위로)
+  if(history.length>1){history.back();setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),120)}
+  else window.scrollTo({top:0,behavior:'smooth'});
+}
 const show=s=>document.querySelectorAll('.scr').forEach(e=>e.classList.toggle('on',e.id==s));
 let G={},game='speed',AC;
 
