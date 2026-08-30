@@ -125,6 +125,7 @@ button{cursor:pointer}
 .mini{font-size:14px;min-height:46px;padding:10px 16px;border-radius:16px;color:var(--navy);
  box-shadow:0 4px 0 var(--navy);font-weight:700}
 .grp{margin-left:0;display:flex;gap:8px;background:rgba(36,29,92,.05);padding:6px;border-radius:22px}
+.mini.home{background:var(--purple);color:#fff;border-color:var(--navy)}
 .mini:active{transform:translateY(3px);box-shadow:0 1px 0 #EDEFF5}
 .stage{flex:1;display:grid;grid-template-columns:1fr 290px;gap:20px;padding:14px 32px;min-height:0}
 .main{display:flex;flex-direction:column;justify-content:center;gap:14px;min-width:0;min-height:0}
@@ -346,14 +347,14 @@ button{cursor:pointer}
 
 <div class="scr" id="play">
   <div class="top">
-    <button class="mini" onclick="tap();back()">← BACK</button>
+    <button class="mini" onclick="tap();back()">↶ UNDO</button>
     <span class="pill" id="unit"></span>
     <span class="pill ghostpill" id="gname"></span>
     <span class="count" id="count"></span>
     <span class="grp">
       <button class="mini" onclick="tap();toggleKo()">KOR</button>
       <button class="mini" onclick="tap();pause()">❚❚ PAUSE</button>
-      <button class="mini" onclick="tap();quit()">END</button>
+      <button class="mini home" onclick="tap();quitAsk()">⌂ HOME</button>
     </span>
   </div>
   <div class="stage">
@@ -370,7 +371,7 @@ button{cursor:pointer}
 
 <div class="scr" id="practice">
   <div class="top">
-    <button class="mini" onclick="tap();show('setup')">← BACK</button>
+    <button class="mini home" onclick="tap();show('setup')">⌂ HOME</button>
     <span class="pill" id="pUnit"></span>
     <span class="pill ghostpill">Practice</span>
     <span class="count" id="pCount"></span>
@@ -393,7 +394,7 @@ button{cursor:pointer}
   <div style="font-size:80px">🎉</div>
   <h1><span>Great job, everyone!</span></h1>
   <div style="font-size:20px;color:var(--muted)">Everybody spoke. Nobody lost. Clap for the whole class. 👏</div>
-  <div class="row"><button class="go" onclick="show('setup')">BACK</button></div>
+  <div class="row"><button class="go" onclick="show('setup')">⌂ HOME</button></div>
   <div class="credit mid">created by Sungmi Bae · Amy English</div>
 </div>
 
@@ -557,12 +558,20 @@ function pause(){G.paused=1;stopTimer();
   el.innerHTML=`<span class="logo big white"></span><h2>Paused</h2><p>Take a breath. The game is waiting.</p>
     <div class="btns"><button onclick="resume()">▶ RESUME</button>
       <button class="alt" onclick="resume();back()">← ONE TURN BACK</button>
-      <button class="alt" onclick="quit()">END GAME</button></div>`;
+      <button class="alt" onclick="quit()">⌂ HOME</button></div>`;
   document.body.appendChild(el);
 }
 function resume(){G.paused=0;const el=$('pauseBox');if(el)el.remove();
   if(G.mode=='ask'&&G.sec&&G.left>0){G.tid=setInterval(tick,1000)}render()}
 function quit(){stopTimer();popClose();const el=$('pauseBox');if(el)el.remove();show('setup')}
+function quitAsk(){                                  // 진행 중 실수로 나가는 것 방지
+  stopTimer();
+  const el=document.createElement('div');el.className='pause';el.id='pauseBox';
+  el.innerHTML=`<h2>Go back home?</h2><p>This game will end. Turns so far will not be saved.</p>
+    <div class="btns"><button onclick="resume()">▶ KEEP PLAYING</button>
+      <button class="alt" onclick="quit()">⌂ GO HOME</button></div>`;
+  document.body.appendChild(el);G.paused=1;
+}
 function beginTurn(){G.hist.push(snap());resumeTurn()}
 function resumeTurn(){
   G.mode='pick';stopTimer();
